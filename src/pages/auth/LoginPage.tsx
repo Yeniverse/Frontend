@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link as RouterLink } from "react-router-dom";
 import {
     Box,
     Button,
@@ -22,6 +23,8 @@ const LoginPage: React.FC = () => {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [showPassword, setShowPassword] = useState<boolean>(false);
+    const [emailError, setEmailError] = useState<String>("");
+    const [passwordError, setPasswordError] = useState<String>("");
 
     const login = (): void => {
         // Redirect to Keycloak / Gateway
@@ -129,6 +132,23 @@ const LoginPage: React.FC = () => {
                 >
                     Get Started
                 </Button>
+                <Box sx={{ textAlign: "center", mb: 2 }}>
+                    <Typography variant="body2">
+                        Don’t have an account?{" "}
+                        <Link
+                            component={RouterLink}
+                            to="/signup"
+                            sx={{
+                                fontWeight: 600,
+                                textDecoration: "none",
+                                color: "primary.main",
+                            }}
+                        >
+                            Sign up
+                        </Link>
+                    </Typography>
+                </Box>
+
 
                 <Divider sx={{ mb: 2 }}>Or sign in with</Divider>
 

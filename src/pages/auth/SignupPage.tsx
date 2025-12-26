@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link as RouterLink } from "react-router-dom";
 import {
   Box,
   Button,
@@ -136,13 +137,17 @@ const SignupPage: React.FC = () => {
         {/* Login Link */}
         <Typography variant="body2" textAlign="center" mb={2}>
           Already have an account?{" "}
-          <Link
-            component="button"
-            onClick={goToLogin}
-            sx={{ fontWeight: 500 }}
-          >
-            Sign in
-          </Link>
+            <Link
+                            component={RouterLink}
+                            to="/login"
+                            sx={{
+                                fontWeight: 600,
+                                textDecoration: "none",
+                                color: "primary.main",
+                            }}
+                        >
+                            Sign in
+                        </Link>
         </Typography>
 
         <Divider sx={{ mb: 2 }}>Or sign up with</Divider>
