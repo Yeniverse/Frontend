@@ -27,13 +27,60 @@ const SignupPage: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const signup = () => {
-    // Redirect to Keycloak / Signup API
-    console.log({ name, email, password, confirmPassword });
+  // Validation errors
+  const [nameError, setNameError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
+
+  const validateEmail = (email: string) => {
+    // simple email regex
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
   };
 
-  const goToLogin = () => {
-    window.location.href = "/login";
+  const signup = () => {
+    let hasError = false;
+
+    // Name validation
+    if (!name.trim()) {
+      setNameError("Full Name is required");
+      hasError = true;
+    } else setNameError("");
+
+    // Email validation
+    if (!email.trim()) {
+      setEmailError("Email is required");
+      hasError = true;
+    } else if (!validateEmail(email)) {
+      setEmailError("Invalid email format");
+      hasError = true;
+    } else setEmailError("");
+
+    // Password validation
+    if (!password) {
+      setPasswordError("Password is required");
+      hasError = true;
+    } else if (password.length < 6) {
+      setPasswordError("Password must be at least 6 characters");
+      hasError = true;
+    } else setPasswordError("");
+
+    // Confirm password validation
+    if (!confirmPassword) {
+      setConfirmPasswordError("Confirm your password");
+      hasError = true;
+    } else if (password !== confirmPassword) {
+      setConfirmPasswordError("Passwords do not match");
+      hasError = true;
+    } else setConfirmPasswordError("");
+
+    if (hasError) return;
+
+    // If no errors, submit form (for now just console.log)
+    console.log({ name, email, password, confirmPassword });
+
+    // TODO: integrate Keycloak signup API or redirect
   };
 
   return (
@@ -57,6 +104,8 @@ const SignupPage: React.FC = () => {
           placeholder="Full Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          error={!!nameError}
+          helperText={nameError}
           sx={{ mb: 2 }}
           InputProps={{
             startAdornment: (
@@ -73,6 +122,8 @@ const SignupPage: React.FC = () => {
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          error={!!emailError}
+          helperText={emailError}
           sx={{ mb: 2 }}
           InputProps={{
             startAdornment: (
@@ -90,6 +141,8 @@ const SignupPage: React.FC = () => {
           type={showPassword ? "text" : "password"}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          error={!!passwordError}
+          helperText={passwordError}
           sx={{ mb: 2 }}
           InputProps={{
             startAdornment: (
@@ -114,6 +167,8 @@ const SignupPage: React.FC = () => {
           type={showPassword ? "text" : "password"}
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
+          error={!!confirmPasswordError}
+          helperText={confirmPasswordError}
           sx={{ mb: 3 }}
           InputProps={{
             startAdornment: (
@@ -137,17 +192,17 @@ const SignupPage: React.FC = () => {
         {/* Login Link */}
         <Typography variant="body2" textAlign="center" mb={2}>
           Already have an account?{" "}
-            <Link
-                            component={RouterLink}
-                            to="/login"
-                            sx={{
-                                fontWeight: 600,
-                                textDecoration: "none",
-                                color: "primary.main",
-                            }}
-                        >
-                            Sign in
-                        </Link>
+          <Link
+            component={RouterLink}
+            to="/login"
+            sx={{
+              fontWeight: 600,
+              textDecoration: "none",
+              color: "primary.main",
+            }}
+          >
+            Sign in
+          </Link>
         </Typography>
 
         <Divider sx={{ mb: 2 }}>Or sign up with</Divider>
